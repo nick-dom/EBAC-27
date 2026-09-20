@@ -1,115 +1,206 @@
 # Diário de Bordo
 
-Um diário pessoal para registrar o que você fez no dia — título, data e uma
-descrição que pode ser tão longa quanto você quiser. É uma PWA de verdade:
-funciona offline, pode ser instalada na tela inicial e não depende de
-nenhum servidor. Tudo fica salvo no `localStorage` do seu próprio
-navegador.
+> Uma PWA simples para registrar o que fiz durante o dia.
 
-Sem React, sem build step, sem backend. HTML, CSS e JS puros, de propósito.
+O **Diário de Bordo** permite criar registros com título, data e descrição.
+Os dados ficam salvos no próprio navegador usando `localStorage`.
 
-Clicando em qualquer entrada da lista, ela abre em uma "página" própria
-(um `<dialog>` do próprio navegador), onde dá pra ler o texto completo,
-copiar ou baixar como `.txt`.
+A aplicação funciona offline, pode ser instalada como PWA e não precisa de servidor ou banco de dados.
 
-## Rodando o projeto
+---
 
-Service worker não funciona abrindo o `index.html` direto no navegador
-(`file://`) — precisa ser servido por HTTP, mesmo que seja localhost.
-Qualquer servidor simples resolve:
+## Funcionalidades
 
-```bash
-npm run start
-# roda "npx serve .", sem precisar instalar nada global
-```
+* Criar registros
+* Definir título, data e descrição
+* Visualizar o conteúdo completo de cada registro
+* Editar e excluir registros
+* Copiar o conteúdo
+* Baixar registros em `.txt`
+* Funcionamento offline
+* Instalação como PWA
+* Armazenamento local no navegador
+* Interface responsiva
 
-Abra a URL que aparecer no terminal (normalmente http://localhost:3000).
+---
 
-## Estrutura
+## Tecnologias
 
-```
-index.html            → marcação da página
-style.css             → estilos (mobile-first, BEM)
-script.js             → toda a lógica: modelo, storage, CRUD, PWA
-manifest.json         → configuração de instalação
-service-worker.js     → cache e suporte offline
-icons/                → ícones 192, 512 e maskable
-tests/diary.test.js   → testes unitários (Jest)
-```
+| Tecnologia   | Uso                                |
+| ------------ | ---------------------------------- |
+| HTML5        | Estrutura da aplicação             |
+| CSS3         | Estilos e responsividade           |
+| JavaScript   | Lógica da aplicação                |
+| PWA          | Instalação e funcionamento offline |
+| LocalStorage | Armazenamento dos registros        |
+| Jest         | Testes                             |
+| ESLint       | Análise do código                  |
+| Prettier     | Formatação                         |
 
+O projeto foi feito sem React, backend ou build step, usando JavaScript puro.
 
-## Testes e lint
+---
+
+## Como executar
+
+Primeiro, instale as dependências:
 
 ```bash
 npm install
-npm test          # roda os testes (Jest)
-npm run lint      # ESLint
-npm run format    # Prettier em tudo
 ```
 
-Os testes cobrem a parte que dá pra testar sem precisar simular o DOM
-inteiro: validação do formulário, o modelo `DiaryEntry` e a persistência
-em `DiaryStorage`. A interface em si eu testei manualmente mesmo, não
-achei que valia a pena montar uma suíte de testes de UI pra um projeto
-vanilla desse tamanho.
-
-O `.github/workflows/ci.yml` roda lint e testes a cada push, então se
-alguma alteração quebrar algo isso aparece no GitHub antes de virar
-problema.
-
-## Testando como PWA
-
-1. Suba o projeto com `npm run start` e abra no Chrome.
-2. DevTools → aba **Lighthouse** → categoria "Progressive Web App" → analisar.
-3. Pra testar offline: DevTools → aba **Network** → marcar "Offline" → recarregar.
-   A interface e as entradas já salvas continuam aparecendo normalmente.
-4. Pra testar a instalação: no desktop o Chrome mostra um ícone de instalar
-   na barra de endereço; no celular, aparece o botão "Instalar aplicativo"
-   que eu conectei no evento `beforeinstallprompt`.
-
-## Subindo pro GitHub
+Depois, inicie o servidor local:
 
 ```bash
-git init
-git add .
-git commit -m "feat: diário de bordo PWA"
-git branch -M main
-git remote add origin https://github.com/SEU_USUARIO/diario-de-bordo.git
-git push -u origin main
+npm run start
 ```
 
-Depois é só ativar o GitHub Pages em Settings → Pages, apontando pra
-branch `main`. O Pages já serve em HTTPS, que é exatamente o que o
-service worker precisa pra funcionar em produção.
+Abra no navegador o endereço mostrado no terminal, normalmente:
 
-## Por que as coisas foram feitas assim
+```text
+http://localhost:3000
+```
 
-Algumas decisões que provavelmente valem uma explicação:
+> [!IMPORTANT]
+> O `service-worker.js` precisa ser executado através de HTTP ou HTTPS. Abrir o `index.html` diretamente com `file://` não é suficiente para testar todas as funcionalidades da PWA.
 
-- **`DiaryEntry`, `DiaryStorage`, `DiaryApp`, `EntryModal` etc. em classes
-  separadas**: cada uma cuida de uma coisa só (modelo, persistência,
-  orquestração da tela, o modal). Ajuda a não virar um `script.js` de
-  1000 linhas onde tudo mexe em tudo.
-- **`#entries` como campo privado em `DiaryApp`**: ninguém de fora consegue
-  alterar a lista de entradas sem passar pelos métodos da classe. É
-  encapsulamento de verdade, não só uma convenção de underscore.
-- **CSS mobile-first**: os estilos "base" (sem media query) já são os do
-  celular; o `min-width` só adiciona coisa pra telas maiores, nunca
-  desfaz o que já tem. Reescrevi isso porque a primeira versão tinha
-  saído meio ao contrário.
-- **O clique na entrada não é um `<h3>`/`<p>` dentro de `<button>`** — isso
-  é inválido no HTML5 (bloco dentro de botão não é permitido). Uso um
-  botão transparente por cima do cartão inteiro (o clássico "cartão
-  clicável"), com o título e a descrição como elementos normais ao lado.
-- **Sem React/Next/TypeScript**: o enunciado pede explicitamente sem
-  framework e sem backend, então não fez sentido forçar isso aqui. Dá
-  pra evoluir pra lá depois — trocar as classes por componentes com
-  hooks, tipar o `DiaryEntry` como interface, etc. — mas seria outro
-  projeto.
+---
+
+## Estrutura
+
+```text
+diario-de-bordo/
+│
+├── index.html
+├── style.css
+├── script.js
+├── manifest.json
+├── service-worker.js
+│
+├── icons/
+│   ├── icon-192.png
+│   ├── icon-512.png
+│   └── icon-maskable.png
+│
+├── tests/
+│   └── diary.test.js
+│
+├── package.json
+└── README.md
+```
+
+---
+
+## Testes
+
+Executar os testes:
+
+```bash
+npm test
+```
+
+Executar o lint:
+
+```bash
+npm run lint
+```
+
+Formatar os arquivos:
+
+```bash
+npm run format
+```
+
+Os testes verificam principalmente:
+
+* validação das entradas;
+* modelo `DiaryEntry`;
+* persistência no `localStorage`.
+
+Também existe uma GitHub Action que executa o lint e os testes automaticamente a cada `push`.
+
+---
+
+## Testando a PWA
+
+### Offline
+
+1. Execute o projeto com `npm run start`.
+2. Abra o projeto no navegador.
+3. Abra o DevTools.
+4. Acesse a aba **Network**.
+5. Ative o modo **Offline**.
+6. Recarregue a página.
+
+A aplicação deve continuar funcionando com os arquivos armazenados pelo service worker e com os registros já salvos.
+
+### Instalação
+
+No Chrome, a opção de instalação pode aparecer na barra de endereço.
+
+Em dispositivos móveis compatíveis, também é possível instalar a aplicação na tela inicial.
+
+### Lighthouse
+
+Para verificar a PWA:
+
+```text
+DevTools
+→ Lighthouse
+→ Progressive Web App
+→ Analyze
+```
+
+---
+
+## Publicação
+
+O projeto pode ser publicado utilizando o **GitHub Pages**.
+
+No repositório:
+
+```text
+Settings
+→ Pages
+→ Deploy from a branch
+→ main
+```
+
+O GitHub Pages fornece HTTPS, permitindo que o service worker funcione em produção.
+
+---
 
 ## Privacidade
 
-Nada sai do seu navegador. Sem servidor, sem analytics, sem chamada de
-rede pros seus dados. Se você limpar o `localStorage` do site, o diário
-some — não tem como recuperar, então bom manter um backup se o conteúdo
-for importante pra você.
+Os registros ficam armazenados apenas no navegador:
+
+```text
+localStorage
+```
+
+O projeto não possui:
+
+* Backend
+* Banco de dados
+* Analytics
+* Conta de usuário
+* Servidor para armazenar os registros
+
+> [!WARNING]
+> Se os dados do site forem apagados do navegador, os registros também poderão ser perdidos. Para informações importantes, é recomendável baixar uma cópia em `.txt`.
+
+---
+
+## Sobre o projeto
+
+A ideia foi criar um diário simples que pudesse funcionar diretamente no navegador, sem depender de uma estrutura externa.
+
+Por isso, escolhi utilizar **HTML, CSS e JavaScript puro**, junto com os recursos de PWA disponíveis no navegador.
+
+A aplicação foi organizada em classes para separar as responsabilidades do código, e o CSS segue uma abordagem **mobile-first**.
+
+---
+
+
+
+
