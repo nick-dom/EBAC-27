@@ -1,149 +1,235 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Diário de Bordo — registro de atividades</title>
-  <meta name="description" content="Diário de Bordo: registre, acompanhe e revise suas atividades diárias. Funciona offline e pode ser instalado como aplicativo." />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Diário de Bordo — registro de atividades</title>
+    <meta
+      name="description"
+      content="Diário de Bordo: registre, acompanhe e revise suas atividades diárias. Funciona offline e pode ser instalado como aplicativo."
+    />
 
-  <!-- PWA: cor de tema da barra do navegador / status bar -->
-  <meta name="theme-color" content="#0f2438" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Diário" />
+    <!-- PWA: cor de tema da barra do navegador / status bar -->
+    <meta name="theme-color" content="#0f2438" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Diário" />
 
-  <!-- Manifest da PWA -->
-  <link rel="manifest" href="manifest.json" />
+    <!-- Manifest da PWA -->
+    <link rel="manifest" href="manifest.json" />
 
-  <!-- Ícones -->
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <!-- Ícones -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
 
-  <!-- Tipografia: serifada de personalidade para títulos + humanista para leitura + mono para "carimbos" de data -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+    <!-- Tipografia: serifada de personalidade para títulos + humanista para leitura + mono para "carimbos" de data -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
 
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-  <div class="app">
-    <!-- Faixa de status: conexão + instalação -->
-    <div class="statusbar" role="status" aria-live="polite">
-      <span class="statusbar__item statusbar__item--conn" id="connStatus" data-online="true">
-        <span class="statusbar__dot" aria-hidden="true"></span>
-        <span id="connStatusText">Você está online</span>
-      </span>
-      <button class="statusbar__install" id="installBtn" type="button" hidden>
-        Instalar aplicativo
-      </button>
+    <div class="app">
+      <!-- Faixa de status: conexão + instalação -->
+      <div class="statusbar" role="status" aria-live="polite">
+        <span class="statusbar__item statusbar__item--conn" id="connStatus" data-online="true">
+          <span class="statusbar__dot" aria-hidden="true"></span>
+          <span id="connStatusText">Você está online</span>
+        </span>
+        <button class="statusbar__install" id="installBtn" type="button" hidden>
+          Instalar aplicativo
+        </button>
+      </div>
+
+      <header class="masthead">
+        <div class="masthead__seal" aria-hidden="true">
+          <svg viewBox="0 0 100 100" class="masthead__seal-svg">
+            <circle cx="50" cy="50" r="46" class="masthead__seal-ring" />
+            <circle cx="50" cy="50" r="38" class="masthead__seal-ring masthead__seal-ring--inner" />
+            <g
+              class="masthead__anchor"
+              stroke="currentColor"
+              stroke-width="4.5"
+              fill="none"
+              stroke-linecap="round"
+            >
+              <circle cx="50" cy="27" r="6" />
+              <line x1="50" y1="33" x2="50" y2="72" />
+              <line x1="36" y1="45" x2="64" y2="45" />
+              <path d="M 32 55 A 18 18 0 0 0 68 55" />
+            </g>
+          </svg>
+        </div>
+        <p class="masthead__eyebrow">Registro pessoal de bordo</p>
+        <h1 class="masthead__title">Diário de Bordo</h1>
+        <p class="masthead__subtitle">
+          Uma página por dia, um registro por atividade — mesmo sem sinal.
+        </p>
+      </header>
+
+      <main id="conteudo" class="log">
+        <!-- Formulário de nova entrada -->
+        <section class="entry-form" aria-labelledby="formTitle">
+          <h2 id="formTitle" class="entry-form__title">Nova entrada</h2>
+          <form id="entryForm" class="entry-form__form" novalidate>
+            <div class="entry-form__row">
+              <div class="entry-form__field entry-form__field--grow">
+                <label class="entry-form__label" for="title">Título</label>
+                <input
+                  class="entry-form__input"
+                  type="text"
+                  id="title"
+                  name="title"
+                  placeholder="Ex.: Vistoria no convés principal"
+                  maxlength="80"
+                  required
+                />
+              </div>
+              <div class="entry-form__field">
+                <label class="entry-form__label" for="date">Data</label>
+                <input
+                  class="entry-form__input entry-form__input--mono"
+                  type="date"
+                  id="date"
+                  name="date"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="entry-form__field">
+              <div class="entry-form__label-row">
+                <label class="entry-form__label" for="description">Descrição</label>
+                <span class="entry-form__counter" id="descCounter" aria-hidden="true"
+                  >0 / 4000</span
+                >
+              </div>
+              <textarea
+                class="entry-form__textarea"
+                id="description"
+                name="description"
+                rows="6"
+                placeholder="Escreva à vontade — como em uma página de diário. O que aconteceu, o que foi observado, o que fica registrado para consulta futura..."
+                maxlength="4000"
+                aria-describedby="descCounter"
+                required
+              ></textarea>
+            </div>
+
+            <p class="entry-form__error" id="formError" role="alert" hidden></p>
+
+            <div class="entry-form__actions">
+              <span class="entry-form__hint">Os registros ficam salvos neste dispositivo.</span>
+              <button class="button button--primary" type="submit">Registrar entrada</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Lista de entradas -->
+        <section class="entries" aria-labelledby="entriesTitle">
+          <div class="entries__header">
+            <h2 id="entriesTitle" class="entries__title">Registros</h2>
+            <span class="entries__count" id="entriesCount">0 entradas</span>
+          </div>
+
+          <ul class="entries__list" id="entriesList"></ul>
+
+          <div class="entries__empty" id="entriesEmpty">
+            <p class="entries__empty-title">O diário ainda está em branco.</p>
+            <p class="entries__empty-text">
+              Registre a primeira atividade do dia usando o formulário acima.
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <footer class="ship-footer">
+        <p>Diário de Bordo — os dados ficam apenas no seu navegador, nunca em um servidor.</p>
+      </footer>
     </div>
 
-    <header class="masthead">
-      <div class="masthead__seal" aria-hidden="true">
-        <svg viewBox="0 0 100 100" class="masthead__seal-svg">
-          <circle cx="50" cy="50" r="46" class="masthead__seal-ring" />
-          <circle cx="50" cy="50" r="38" class="masthead__seal-ring masthead__seal-ring--inner" />
-          <g class="masthead__anchor" stroke="currentColor" stroke-width="4.5" fill="none" stroke-linecap="round">
-            <circle cx="50" cy="27" r="6" />
-            <line x1="50" y1="33" x2="50" y2="72" />
-            <line x1="36" y1="45" x2="64" y2="45" />
-            <path d="M 32 55 A 18 18 0 0 0 68 55" />
-          </g>
-        </svg>
-      </div>
-      <p class="masthead__eyebrow">Registro pessoal de bordo</p>
-      <h1 class="masthead__title">Diário de Bordo</h1>
-      <p class="masthead__subtitle">Uma página por dia, um registro por atividade — mesmo sem sinal.</p>
-    </header>
+    <!-- Modelo (template) de uma entrada, clonado via JavaScript -->
+    <template id="entryTemplate">
+      <li class="entry" data-id="">
+        <!-- Botão "invisível" que cobre o cartão inteiro (padrão de cartão
+             clicável / stretched button): mantém o conteúdo visível como
+             <h3>/<p> normais (válidos no fluxo do documento) e ainda torna
+             a entrada inteira clicável/acessível por teclado. -->
+        <button
+          class="entry__open"
+          type="button"
+          aria-haspopup="dialog"
+          aria-label="Abrir registro completo"
+        ></button>
+        <div class="entry__stamp">
+          <time class="entry__date"></time>
+        </div>
+        <div class="entry__body">
+          <h3 class="entry__title">Título do registro</h3>
+          <p class="entry__description"></p>
+          <span class="entry__more" aria-hidden="true">Abrir página →</span>
+        </div>
+        <button class="entry__delete" type="button" aria-label="Remover entrada">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path
+              d="M4 6h16M9 6V4h6v2m-8 0 1 14h10l1-14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </li>
+    </template>
 
-    <main id="conteudo" class="log">
-      <!-- Formulário de nova entrada -->
-      <section class="entry-form" aria-labelledby="formTitle">
-        <h2 id="formTitle" class="entry-form__title">Nova entrada</h2>
-        <form id="entryForm" class="entry-form__form" novalidate>
-          <div class="entry-form__row">
-            <div class="entry-form__field entry-form__field--grow">
-              <label class="entry-form__label" for="title">Título</label>
-              <input
-                class="entry-form__input"
-                type="text"
-                id="title"
-                name="title"
-                placeholder="Ex.: Vistoria no convés principal"
-                maxlength="80"
-                required
+    <!-- Página expandida de uma entrada: usa o elemento nativo <dialog>,
+       que já traz semântica, foco preso (focus trap) e fechamento por Esc. -->
+    <dialog class="entry-modal" id="entryModal" aria-labelledby="entryModalTitle">
+      <form method="dialog" class="entry-modal__form">
+        <div class="entry-modal__header">
+          <time class="entry-modal__date" id="entryModalDate"></time>
+          <button class="entry-modal__close" type="submit" aria-label="Fechar página">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path
+                d="M5 5l14 14M19 5 5 19"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
               />
-            </div>
-            <div class="entry-form__field">
-              <label class="entry-form__label" for="date">Data</label>
-              <input class="entry-form__input entry-form__input--mono" type="date" id="date" name="date" required />
-            </div>
-          </div>
-
-          <div class="entry-form__field">
-            <label class="entry-form__label" for="description">Descrição</label>
-            <textarea
-              class="entry-form__textarea"
-              id="description"
-              name="description"
-              rows="3"
-              placeholder="O que aconteceu, o que foi observado, o que fica registrado para consulta futura..."
-              maxlength="500"
-              required
-            ></textarea>
-          </div>
-
-          <p class="entry-form__error" id="formError" role="alert" hidden></p>
-
-          <div class="entry-form__actions">
-            <span class="entry-form__hint">Os registros ficam salvos neste dispositivo.</span>
-            <button class="button button--primary" type="submit">Registrar entrada</button>
-          </div>
-        </form>
-      </section>
-
-      <!-- Lista de entradas -->
-      <section class="entries" aria-labelledby="entriesTitle">
-        <div class="entries__header">
-          <h2 id="entriesTitle" class="entries__title">Registros</h2>
-          <span class="entries__count" id="entriesCount">0 entradas</span>
+            </svg>
+          </button>
         </div>
 
-        <ul class="entries__list" id="entriesList"></ul>
+        <h2 class="entry-modal__title" id="entryModalTitle">Registro do diário</h2>
+        <p class="entry-modal__description" id="entryModalDescription"></p>
+        <p class="entry-modal__meta" id="entryModalMeta"></p>
 
-        <div class="entries__empty" id="entriesEmpty">
-          <p class="entries__empty-title">O diário ainda está em branco.</p>
-          <p class="entries__empty-text">Registre a primeira atividade do dia usando o formulário acima.</p>
+        <div class="entry-modal__footer">
+          <button class="button button--ghost" type="button" id="entryModalCopy">
+            Copiar texto
+          </button>
+          <button class="button button--ghost" type="button" id="entryModalDownload">
+            Baixar em .txt
+          </button>
+          <button class="button button--danger" type="button" id="entryModalDelete">
+            Remover entrada
+          </button>
         </div>
-      </section>
-    </main>
+      </form>
+    </dialog>
 
-    <footer class="ship-footer">
-      <p>Diário de Bordo — os dados ficam apenas no seu navegador, nunca em um servidor.</p>
-    </footer>
-  </div>
+    <!-- Aviso curto e discreto para confirmar ações como "copiado" -->
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-  <!-- Modelo (template) de uma entrada, clonado via JavaScript -->
-  <template id="entryTemplate">
-    <li class="entry" data-id="">
-      <div class="entry__stamp">
-        <time class="entry__date"></time>
-      </div>
-      <div class="entry__body">
-        <h3 class="entry__title"></h3>
-        <p class="entry__description"></p>
-      </div>
-      <button class="entry__delete" type="button" aria-label="Remover entrada">
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-          <path d="M4 6h16M9 6V4h6v2m-8 0 1 14h10l1-14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </li>
-  </template>
-
-  <script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>

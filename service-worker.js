@@ -12,7 +12,7 @@
  * CACHE_VERSION para que os usuários recebam a versão nova.
  */
 
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2"; // ícones atualizados — v1 tinha os ícones antigos em cache
 const CACHE_NAME = `diario-de-bordo-${CACHE_VERSION}`;
 
 // "App shell": o conjunto mínimo de arquivos para a interface funcionar.
@@ -104,7 +104,9 @@ async function cacheFirstWithRevalidate(request) {
   const cached = await caches.match(request);
   if (cached) {
     // Atualiza o cache em segundo plano sem atrasar a resposta atual.
-    fetch(request).then((response) => updateCache(request, response)).catch(() => {});
+    fetch(request)
+      .then((response) => updateCache(request, response))
+      .catch(() => {});
     return cached;
   }
 
@@ -112,7 +114,7 @@ async function cacheFirstWithRevalidate(request) {
     const response = await fetch(request);
     updateCache(request, response.clone());
     return response;
-  } catch (error) {
+  } catch {
     // Sem rede e sem item no cache: não há o que devolver.
     return Response.error();
   }

@@ -1,0 +1,32 @@
+name: CI
+
+# Roda a cada push ou pull request para a branch principal, validando
+# que o projeto continua com lint limpo e todos os testes passando
+# antes de qualquer alteração ser considerada "pronta".
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Rodar lint (ESLint)
+        run: npm run lint
+
+      - name: Rodar testes unitários (Jest)
+        run: npm test
